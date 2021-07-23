@@ -25,8 +25,11 @@ export default class App extends React.Component {
 
   getData = (kw) => {
     console.log('page clicked')
+    if (!kw) {
+      kw = 'Greece';
+    }
     axios
-    .get(`http://localhost:3000/events?q=${kw}&_page=1&_limit=10`)
+    .get(`http://localhost:3000/events?q=${kw}`)
     .then(res => {
       const data = res.data;
       const slice = data.slice(0, 10)
@@ -42,15 +45,11 @@ export default class App extends React.Component {
       this.setState({
         loading: !this.state.loading,
         pageCount: Math.ceil(res.data.length / this.state.perPage),
-
-
         postData
       });
     } else {
       this.setState({
         pageCount: Math.ceil(res.data.length / this.state.perPage),
-
-
         postData
       });
     }
@@ -58,7 +57,6 @@ export default class App extends React.Component {
   }
 
   handlePageClick = (e) => {
-    e.preventDefault();
     const selectedPage = e.selected;
     console.log('selectedPage: ', selectedPage)
     const offset = selectedPage * this.state.perPage;
@@ -67,7 +65,7 @@ export default class App extends React.Component {
         currentPage: selectedPage,
         offset: offset
     }, () => {
-        this.getData(this.state.keyword)
+        this.getData()
     });
 
   };
@@ -90,22 +88,6 @@ export default class App extends React.Component {
     return (
       <div>
         <h1>The Historical Places Archive</h1>
-        <div>
-          {this.state.postData}
-            <ReactPaginate
-              previousLabel={"prev"}
-              nextLabel={"next"}
-              breakLabel={"..."}
-              breakClassName={"break-me"}
-              pageCount={this.state.pageCount}
-              marginPagesDisplayed={6}
-              pageRangeDisplayed={5}
-              onPageChange={this.handlePageClick}
-              containerClassName={"pagination"}
-              subContainerClassName={"pages pagination"}
-              activeClassName={"active"}
-            />
-        </div>
         <div className="form-container">
           <div className="form">
             <form onSubmit={this.submit}>
@@ -116,6 +98,22 @@ export default class App extends React.Component {
               <input type="submit" value="Submit" />
             </form>
           </div>
+        </div>
+        <div>
+          {this.state.postData}
+            <ReactPaginate
+              previousLabel={"prev"}
+              nextLabel={"next"}
+              breakLabel={"..."}
+              breakClassName={"break-me"}
+              pageCount={this.state.pageCount}
+              marginPagesDisplayed={6}
+              pageRangeDisplayed={10}
+              onPageChange={this.handlePageClick}
+              containerClassName={"pagination"}
+              subContainerClassName={"pages pagination"}
+              activeClassName={"active"}
+            />
         </div>
       </div>
     );
