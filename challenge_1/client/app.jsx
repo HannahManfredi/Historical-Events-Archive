@@ -11,12 +11,8 @@ export default class App extends React.Component {
       data: [],
       perPage: 10,
       currentPage: 0,
-      // search_data: [],
-      keyword: '',
-
-      // pageCount: 0
+      keyword: ''
     };
-
     this.change = this.change.bind(this);
     this.submit = this.submit.bind(this);
     this.getData = this.getData .bind(this);
@@ -28,6 +24,7 @@ export default class App extends React.Component {
   }
 
   getData = (kw) => {
+    console.log('page clicked')
     axios
     .get(`http://localhost:3000/events?q=${kw}&_page=1&_limit=10`)
     .then(res => {
@@ -63,7 +60,9 @@ export default class App extends React.Component {
   handlePageClick = (e) => {
     e.preventDefault();
     const selectedPage = e.selected;
+    console.log('selectedPage: ', selectedPage)
     const offset = selectedPage * this.state.perPage;
+    console.log('offset: ', offset)
     this.setState({
         currentPage: selectedPage,
         offset: offset
@@ -99,7 +98,7 @@ export default class App extends React.Component {
               breakLabel={"..."}
               breakClassName={"break-me"}
               pageCount={this.state.pageCount}
-              marginPagesDisplayed={2}
+              marginPagesDisplayed={6}
               pageRangeDisplayed={5}
               onPageChange={this.handlePageClick}
               containerClassName={"pagination"}
@@ -126,16 +125,3 @@ export default class App extends React.Component {
 
 ReactDOM.render(<App />, document.getElementById('app'));
 
-
-//OVERALL OBJECTIVE:
-//Paginate the list of events using react-paginate, loading no more than ten at a time.
-//Ensure you are implementing server-side pagination  NOT client-side pagination.
-
-// Reminder: emphasis should be placed on creating well-defined interfaces, writing code with a clear separation of concerns, and using the principles of modularity, encapsulation, abstraction.
-
-// Advanced Content
-// That data is messy! Add an edit button on the UI to allow the historical event information to be edited. Allow those edits to be saved back to the server using a save button.
-// Add the feature of "Favoriting" a historical event: when the user favorites an event, they are prompted for a "Favorite Set". The user may select an already existing "Favorite Set" or may wish to create a new "Favorite Set." What's a Favorite Set? Instead of having only one set of favorites, some sites (like Airbnb) allow users to create many sets of favorites, where each set has a unique name. For example, a user might favorite some events into "War Story" favorites and others into "Science Story" favorites.
-// Use react-router to navigate throughout the app. Allow the user to navigate to a page where they can see all of their Favorite Sets and another page to see all the events of a selected Favorite Set. Don't forget to let the user navigate back to the search page.
-// Nightmare Mode
-// Replace json-server with your own server, created using Express+MongoDB
