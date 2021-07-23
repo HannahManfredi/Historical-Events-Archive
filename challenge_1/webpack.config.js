@@ -1,9 +1,9 @@
 const path = require('path');
 
 module.exports = {
-  entry: "/client/app.jsx",
-  watch: true,
+  entry: './client/app.jsx',
   mode: 'development',
+  watch: true,
   output: {
     filename: 'app.js',
     path: path.join(__dirname, 'public')
@@ -14,7 +14,7 @@ module.exports = {
         test: /\.(jsx|js)$/,
         include: path.resolve('./client'),
         exclude: /node_modules/,
-        use: [{
+        use: ['source-map-loader', {
           loader: 'babel-loader',
           options: {
             presets: [
